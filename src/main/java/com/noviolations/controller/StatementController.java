@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,10 +26,10 @@ public class StatementController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping("/user/{userId}")
-	public Statement createStatement(@RequestBody Statement statement, @PathVariable Long userId) throws Exception {
+	@PostMapping()
+	public Statement createStatement(@RequestBody Statement statement, @RequestHeader("Authorization") String jwt) throws Exception {
 
-		User user = userService.findUserById(userId);
+		User user = userService.findUserByJwt(jwt);
 
 		Statement createdStatement = statementService.create(statement, user);
 		return createdStatement;
